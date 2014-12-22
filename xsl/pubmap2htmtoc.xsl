@@ -5,7 +5,11 @@
      Copyright (c) 2009 DITA For Publishers
      
      =========================================================== -->
-<xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+<xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns:relpath="http://dita2indesign/functions/relpath"
+    exclude-result-prefixes="xs relpath"
+  >
   
   <xsl:template match="*[contains(@class, ' map/topicref ')][not(@toc='no')][not(@processing-role='resource-only')]">
     <xsl:param name="pathFromMaplist"/>
@@ -35,14 +39,17 @@
               <xsl:element name="a">
                 <xsl:attribute name="href">
                   <xsl:choose>        <!-- What if targeting a nested topic? Need to keep the ID? -->
-                    <xsl:when test="contains(@copy-to, $DITAEXT) and not(contains(@chunk, 'to-content'))">
+                    <xsl:when test="(contains(@copy-to, '.xml') or contains(@copy-to, '.dita')) and 
+                                    not(contains(@chunk, 'to-content'))">
+                      <xsl:variable name="DITAEXT" as="xs:string" select="relpath:getExtension(@copy-to)"/>
                       <xsl:if test="not(@scope='external')"><xsl:value-of select="$pathFromMaplist"/></xsl:if>
                       <xsl:value-of select="substring-before(@copy-to,$DITAEXT)"/><xsl:value-of select="$OUTEXT"/>
                       <xsl:if test="not(contains(@copy-to, '#')) and contains(@href, '#')">
                         <xsl:value-of select="concat('#', substring-after(@href, '#'))"/>
                       </xsl:if>
                     </xsl:when>
-                    <xsl:when test="contains(@href,$DITAEXT)">
+                    <xsl:when test="(contains(@href, '.xml') or contains(@href, '.dita'))">
+                      <xsl:variable name="DITAEXT" as="xs:string" select="relpath:getExtension(@copy-to)"/>
                       <xsl:if test="not(@scope='external')"><xsl:value-of select="$pathFromMaplist"/></xsl:if>
                       <xsl:value-of select="substring-before(@href,$DITAEXT)"/><xsl:value-of select="$OUTEXT"/>
                       <xsl:if test="contains(@href, '#')">
