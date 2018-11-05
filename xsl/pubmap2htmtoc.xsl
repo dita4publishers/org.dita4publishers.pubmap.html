@@ -76,13 +76,13 @@
           
           <!-- If there are any children that should be in the TOC, process them -->
           <xsl:if test="descendant::*[contains(@class, ' map/topicref ')][not(contains(@toc,'no'))][not(@processing-role='resource-only')]">
-            <xsl:value-of select="$newline"/><ul><xsl:value-of select="$newline"/>
+            <xsl:value-of select="'&#x0a;'"/><ul><xsl:value-of select="'&#x0a;'"/>
               <xsl:apply-templates select="*[contains(@class, ' map/topicref ')]">
                 <xsl:with-param name="pathFromMaplist" select="$pathFromMaplist"/>
               </xsl:apply-templates>
-            </ul><xsl:value-of select="$newline"/>
+            </ul><xsl:value-of select="'&#x0a;'"/>
           </xsl:if>
-        </li><xsl:value-of select="$newline"/>
+        </li><xsl:value-of select="'&#x0a;'"/>
       </xsl:when>
       <xsl:otherwise>
         <!-- if it is an empty topicref -->
